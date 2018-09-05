@@ -1,0 +1,15 @@
+{
+    "name": "translateSave",
+    "version": "1.0",
+    "description": "This saves and translates words to Study.",
+    "permissions": ["contextMenus","storage"],
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+    },
+    "icons": {
+        "16": "images/icon.png"
+    },
+    "manifest_version": 2
+
+}

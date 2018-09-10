@@ -4,7 +4,7 @@
     "description": "This saves and translates words to Study.",
     "permissions": ["contextMenus","storage"],
     "background": {
-      "scripts": ["background.js"],
+      "scripts": ["background.js","practice.js"],
       "persistent": false
     },
     "icons": {

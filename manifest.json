@@ -2,7 +2,7 @@
     "name": "translateSave",
     "version": "1.0",
     "description": "This saves and translates words to Study.",
-    "permissions": ["contextMenus","storage"],
+    "permissions": ["contextMenus","storage","https://glosbe.com/"],
     "background": {
       "scripts": ["background.js","practice.js"],
       "persistent": false

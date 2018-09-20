@@ -11,10 +11,24 @@ function translateWord(info,tab) {
         var translatedWord = "";
         if(parsed.tuc[0].phrase == null) {
             var phrase = parsed.tuc[0].meanings[0].text;
-            var pluralWord = phrase.substring(15, phrase.length-1);
-            inputWord = pluralWord;
-            console.log(pluralWord);
-            var dePluralUrl = "https://glosbe.com/gapi/translate?from=spa&dest=eng&format=json&phrase="+pluralWord;
+            if(phrase.substring(0,14) == "Plural form of") {
+                var pluralWord = phrase.substring(15, phrase.length-1);
+                getNewWord(pluralWord);
+            } else if (phrase.includes("form of")) {
+                var infWord = phrase.substring(phrase.indexOf("form of")+8,phrase.length-1);
+                getNewWord(infWord);
+            } else {
+                translatedWord = parsed.tuc[0].meanings[0].text;
+                saveWord();
+            }
+        } else {
+            translatedWord = parsed.tuc[0].phrase.text;
+            saveWord();
+        }
+
+        function getNewWord(newWord) {
+            inputWord = newWord;
+            var dePluralUrl = "https://glosbe.com/gapi/translate?from=spa&dest=eng&format=json&phrase="+newWord;
             var dpRequest = new XMLHttpRequest;
             dpRequest.open('GET', dePluralUrl, true);
             dpRequest.responseType = 'text';
@@ -22,13 +36,9 @@ function translateWord(info,tab) {
             dpRequest.onload = function() {
                 var txt = dpRequest.response;
                 var parsed2 = JSON.parse(txt);
-                console.log(parsed2.tuc[0]);
                 translatedWord = parsed2.tuc[0].phrase.text;
                 saveWord();
             }
-        } else {
-            translatedWord = parsed.tuc[0].phrase.text;
-            saveWord();
         }
 
         function saveWord() {

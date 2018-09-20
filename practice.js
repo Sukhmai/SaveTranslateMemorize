@@ -4,7 +4,6 @@ chrome.storage.sync.get('words', function(data) {
         var transWords = data2.translated;
         var index = 0;
         var flipped = false;
-        console.log(origWords[0]+" "+transWords[0]);
         var card = document.querySelector('.card');
         card.addEventListener('click', flipCard);
         var front = document.getElementById('front');
@@ -22,11 +21,13 @@ chrome.storage.sync.get('words', function(data) {
 
         function nextPair() {
             index++;
-            front.innerHTML = origWords[index];
-            back.innerHTML = transWords[index];
             if(flipped) {
                 flipCard();
+                setTimeout(changeWords, 700);
+            } else {
+                changeWords();
             }
+
         }
         function flipCard() {
             card.classList.toggle('is-flipped');
@@ -35,6 +36,11 @@ chrome.storage.sync.get('words', function(data) {
             } else {
                 flipped = true;
             }
+        }
+
+        function changeWords () {
+            front.innerHTML = origWords[index];
+            back.innerHTML = transWords[index];
         }
     });
 });

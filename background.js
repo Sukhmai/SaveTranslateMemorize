@@ -30,7 +30,7 @@ function translateWord(info,tab) {
         });
     };
 }
-
+//This creates the context menu
 chrome.storage.sync.set({'words':[]}, function() {
     chrome.storage.sync.set({'translated':[]}, function() {
         chrome.contextMenus.create({

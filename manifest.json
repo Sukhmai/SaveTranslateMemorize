@@ -2,13 +2,19 @@
     "name": "translateSave",
     "version": "1.0",
     "description": "This saves and translates words to Study.",
-    "permissions": ["contextMenus","storage","https://glosbe.com/"],
+    "permissions": ["contextMenus","storage","https://glosbe.com/","activeTab","declarativeContent", "tabs"],
     "background": {
       "scripts": ["background.js","practice.js"],
       "persistent": false
     },
     "icons": {
         "16": "images/icon.png"
+    },
+    "browser_action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "images/icon.png"
+      }
     },
     "manifest_version": 2
 

@@ -7,13 +7,17 @@ chrome.storage.sync.get('words', function(data) {
                     var transWords = data2.translated;
                     var queue = data3.queue;
                     var times = data4.times;
-                    var isNew = data5.newWord;
-                    for(i = 0; i < words.length; i++) {
-                        if(!(isNew[i]==true)) {
-                            queue.push(words[i]);
+                    var isOld = data5.newWord;
+                    for(i = 0; i < origWords.length; i++) {
+                        if(!(isOld[i]==true)) {
+                            queue.push(i);
+                            isOld[i]=true;
                         }
                     }
-                    var index = 0;
+                    //qIndex should iterate +1, it iterates through the queue
+                    qIndex=0;
+                    //var index points to the index corresponding to whatever is next in queue
+                    var index = queue[0];
                     var flipped = false;
                     var card = document.querySelector('.card');
                     card.addEventListener('click', flipCard);
@@ -50,7 +54,9 @@ chrome.storage.sync.get('words', function(data) {
                     }
 
                     function nextPair() {
-                        index++;
+                        isOld[index]=true;
+                        qIndex++;
+                        index = queue[qIndex];
                         if(flipped) {
                             flipCard();
                             setTimeout(changeWords, 700);

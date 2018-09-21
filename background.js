@@ -75,3 +75,7 @@ chrome.storage.sync.set({'words':[]}, function() {
         chrome.contextMenus.onClicked.addListener(translateWord);
     });
 });
+
+chrome.storage.sync.set({'queue':[]});
+chrome.storage.sync.set({'newWord':[]});
+chrome.storage.sync.set({'times':[]}, function() {});

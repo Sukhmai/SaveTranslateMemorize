@@ -12,11 +12,11 @@ chrome.storage.sync.get('words', function(data) {
                         if(!(isOld[i]==true)) {
                             queue.push(i);
                             isOld[i]=true;
+                            chrome.storage.sync.set({'newWord':isOld});
                         }
                     }
-                    //qIndex should iterate +1, it iterates through the queue
-                    qIndex=0;
                     //var index points to the index corresponding to whatever is next in queue
+                    refill();
                     var index = queue[0];
                     var flipped = false;
                     var card = document.querySelector('.card');
@@ -50,13 +50,17 @@ chrome.storage.sync.get('words', function(data) {
                     function newTime(mins,hours,days) {
                         var d = new Date();
                         times[index]=d.getTime()+1000*60*mins*hours*days;
+                        chrome.storage.sync.set({'times': times});
                         nextPair();
                     }
 
                     function nextPair() {
-                        isOld[index]=true;
-                        qIndex++;
-                        index = queue[qIndex];
+                        queue.splice(0,1);
+                        if(queue[0]==null) {
+                            refill();
+                        }
+                        index = queue[0];
+                        chrome.storage.sync.set({'queue': queue});
                         if(flipped) {
                             flipCard();
                             setTimeout(changeWords, 700);
@@ -77,6 +81,19 @@ chrome.storage.sync.get('words', function(data) {
                     function changeWords () {
                         front.innerHTML = origWords[index];
                         back.innerHTML = transWords[index];
+                    }
+                    //this function checks if new words should be added to the queue
+                    function refill() {
+                        var date = new Date();
+                        var time = date.getTime();
+                        for(i=0; i<origWords.length; i++) {
+                            if (time >= times[i]) {
+                                queue.push(i);
+                            }
+                        }
+                        if(queue[0]==null) {
+                            alert("You ran out of words to practice! Add more or come back later.");
+                        }
                     }
                 });
             });

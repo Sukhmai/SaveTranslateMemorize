@@ -4,7 +4,7 @@
     "description": "This saves and translates words to Study.",
     "permissions": ["contextMenus","storage","https://glosbe.com/","activeTab","declarativeContent", "tabs"],
     "background": {
-      "scripts": ["background.js","practice.js"],
+      "scripts": ["background.js"],
       "persistent": false
     },
     "icons": {

@@ -17,6 +17,9 @@ function translateWord(info,tab) {
             } else if (phrase.includes("form of")) {
                 var infWord = phrase.substring(phrase.indexOf("form of")+8,phrase.length-1);
                 getNewWord(infWord);
+            } else if (phrase.includes("participle of")) {
+                var partWord = phrase.substring(phrase.indexOf("participle of")+14,phrase.length-1);
+                getNewWord(partWord);
             } else {
                 translatedWord = parsed.tuc[0].meanings[0].text;
                 saveWord();

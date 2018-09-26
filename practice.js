@@ -9,11 +9,7 @@ chrome.storage.sync.get('words', function(data) {
                     var times = data4.times;
                     var isOld = data5.newWord;
                     for(i = 0; i < origWords.length; i++) {
-                        if(!(isOld[i]==true)) {
-                            queue.push(i);
-                            isOld[i]=true;
-                            chrome.storage.sync.set({'newWord':isOld});
-                        }
+                        isOldCheck(i);
                     }
                     //var index points to the index corresponding to whatever is next in queue
                     refill();
@@ -55,8 +51,10 @@ chrome.storage.sync.get('words', function(data) {
                     }
 
                     function nextPair() {
-                        queue.splice(0,1);
-                        if(queue[0]==null) {
+                        addNewWords();
+                        if(!(queue[1] == null)) {
+                            queue.splice(0,1);
+                        } else {
                             refill();
                         }
                         index = queue[0];
@@ -69,6 +67,7 @@ chrome.storage.sync.get('words', function(data) {
                         }
 
                     }
+                    //controls the css flip animation
                     function flipCard() {
                         card.classList.toggle('is-flipped');
                         if(flipped) {
@@ -82,6 +81,7 @@ chrome.storage.sync.get('words', function(data) {
                         front.innerHTML = origWords[index];
                         back.innerHTML = transWords[index];
                     }
+
                     //this function checks if new words should be added to the queue
                     function refill() {
                         var date = new Date();
@@ -91,8 +91,30 @@ chrome.storage.sync.get('words', function(data) {
                                 queue.push(i);
                             }
                         }
-                        if(queue[0]==null) {
-                            alert("You ran out of words to practice! Add more or come back later.");
+                        if(queue[1]==null) {
+                            alert("You ran out of words! Please come back or add more.");
+                        }
+                    }
+
+                    //This function adds words that the users adds during practice sessions
+                    function addNewWords() {
+                        chrome.storage.sync.get('words', function(output) {
+                            chrome.storage.sync.get('translated', function(output2) {
+                                origWords = output.words;
+                                transWords = output2.translated;
+                                for(i=0; i<origWords.length; i++) {
+                                    isOldCheck(i);
+                                }
+                            });
+                        });
+                    }
+
+                    function isOldCheck(index) {
+                        if(!(isOld[index]==true)) {
+                            queue.push(i);
+                            isOld[index]=true;
+                            console.log("word added");
+                            chrome.storage.sync.set({'newWord':isOld});
                         }
                     }
                 });

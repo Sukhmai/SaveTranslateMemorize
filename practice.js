@@ -50,6 +50,7 @@ chrome.storage.sync.get('words', function(data) {
                         nextPair();
                     }
 
+                    //this gets the next pair of words
                     function nextPair() {
                         addNewWords();
                         if(!(queue[1] == null)) {

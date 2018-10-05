@@ -1,13 +1,18 @@
+var origWords;
+var transWords;
+var isOld;
+var queue;
+var times;
 chrome.storage.sync.get('words', function(data) {
     chrome.storage.sync.get('translated', function(data2) {
         chrome.storage.sync.get('queue', function(data3) {
             chrome.storage.sync.get('times', function(data4) {
                 chrome.storage.sync.get('newWord', function(data5) {
-                    var origWords = data.words;
-                    var transWords = data2.translated;
-                    var queue = data3.queue;
-                    var times = data4.times;
-                    var isOld = data5.newWord;
+                    origWords = data.words;
+                    transWords = data2.translated;
+                    queue = data3.queue;
+                    times = data4.times;
+                    isOld = data5.newWord;
                     for(i = 0; i < origWords.length; i++) {
                         isOldCheck(i);
                     }
@@ -52,7 +57,6 @@ chrome.storage.sync.get('words', function(data) {
 
                     //this gets the next pair of words
                     function nextPair() {
-                        addNewWords();
                         if(!(queue[1] == null)) {
                             queue.splice(0,1);
                         } else {
@@ -96,30 +100,31 @@ chrome.storage.sync.get('words', function(data) {
                             alert("You ran out of words! Please come back or add more.");
                         }
                     }
-
-                    //This function adds words that the users adds during practice sessions
-                    function addNewWords() {
-                        chrome.storage.sync.get('words', function(output) {
-                            chrome.storage.sync.get('translated', function(output2) {
-                                origWords = output.words;
-                                transWords = output2.translated;
-                                for(i=0; i<origWords.length; i++) {
-                                    isOldCheck(i);
-                                }
-                            });
-                        });
-                    }
-
-                    function isOldCheck(index) {
-                        if(!(isOld[index]==true)) {
-                            queue.push(i);
-                            isOld[index]=true;
-                            console.log("word added");
-                            chrome.storage.sync.set({'newWord':isOld});
-                        }
-                    }
                 });
             });
         });
     });
 });
+
+function isOldCheck(index) {
+    if(!(isOld[index]==true)) {
+        console.log(index);
+        queue.push(index);
+        isOld[index]=true;
+        chrome.storage.sync.set({'newWord':isOld});
+    }
+}
+
+chrome.storage.onChanged.addListener(function(changes, namespace){
+    if(!(changes["words"] == null)) {
+        var storageChange = changes["words"].newValue;
+        origWords = storageChange;
+    }
+    else if(!(changes["translated"] == null)) {
+        var storageChange = changes["translated"].newValue;
+        transWords = storageChange;
+        console.log(transWords.length-1);
+        isOldCheck(transWords.length-1);
+    }
+
+})

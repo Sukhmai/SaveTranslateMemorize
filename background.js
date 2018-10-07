@@ -68,17 +68,27 @@ function translateWord(info,tab) {
     };
 }
 //This creates the context menu
-chrome.storage.sync.set({'words':[]}, function() {
-    chrome.storage.sync.set({'translated':[]}, function() {
-        chrome.contextMenus.create({
-            id:"transSave",
-            title: "Translate and Save: %s",
-            contexts:["selection"],
+chrome.storage.sync.get('words', function(data){
+    if(data.words==null){
+        chrome.storage.sync.set({'words':[]}, function() {
+            chrome.storage.sync.set({'translated':[]}, function() {
+                createContextMenu();
+            });
         });
-        chrome.contextMenus.onClicked.addListener(translateWord);
-    });
+        chrome.storage.sync.set({'queue':[]});
+        chrome.storage.sync.set({'newWord':[]});
+        chrome.storage.sync.set({'times':[]});
+        chrome.storage.sync.set({'pushed':[]});
+    } else {
+        createContextMenu();
+    }
 });
 
-chrome.storage.sync.set({'queue':[]});
-chrome.storage.sync.set({'newWord':[]});
-chrome.storage.sync.set({'times':[]}, function() {});
+function createContextMenu() {
+    chrome.contextMenus.create({
+        id:"transSave",
+        title: "Translate and Save: %s",
+        contexts:["selection"],
+    });
+    chrome.contextMenus.onClicked.addListener(translateWord);
+}

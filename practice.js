@@ -6,6 +6,7 @@ var times;
 var index;
 var pushed;
 var flipped = false;
+var settingsBarState = false;
 var card = document.querySelector('.card');
 card.addEventListener('click', flipCard);
 var front = document.getElementById('front');
@@ -133,3 +134,15 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
         refill(false);
     }
 })
+
+
+document.getElementById('settingsButton').onclick = openSettingsBar;
+function openSettingsBar() {
+    if(settingsBarState) {
+        document.getElementById('settingsBar').style.width="0%";
+        settingsBarState = false;
+    } else {
+        document.getElementById('settingsBar').style.width="15%";
+        settingsBarState = true;
+    }
+}

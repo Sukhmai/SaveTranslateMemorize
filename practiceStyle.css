@@ -1,11 +1,10 @@
 body { font-family: sans-serif; }
 
 .scene {
+    display: inline-block;
   width: 500px;
   height: 260px;
-  margin: 40px 0;
   perspective: 600px;
-  margin: 0 auto;
   padding-top: 10%;
 }
 
@@ -50,11 +49,7 @@ button {
 }
 
 #buttons {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width:260px;
-    padding-top: 10px;
+    padding-top: 50px;
 }
 
 #settingsBar {
@@ -78,19 +73,29 @@ button {
 #save {
     width:40%;
     height:5%;
-    background-color: #42f46e;
-    border: none;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    cursor: pointer;
-	border-radius: 8px;
-    display: inline-block
+    background-color: #32ef5b;
+    /* color: white; */
 }
 
 #settingsButton {
     width:64px;
     height:64px;
+}
+
+#clear {
+    width:60%;
+    height:10%;
+}
+
+.replyButtons {
+    display: inline-block;
+    width:5%;
+    height:20%;
+    margin-left: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+body {
+    text-align: center;
 }

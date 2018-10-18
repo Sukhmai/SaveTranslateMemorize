@@ -11,6 +11,11 @@ var card = document.querySelector('.card');
 card.addEventListener('click', flipCard);
 var front = document.getElementById('front');
 var back = document.getElementById('back');
+
+/**
+  * This is the function callback sequence that gets all the data
+  * from chrome storage so that it can be put into the flashcards
+  */
 chrome.storage.sync.get('words', function(data) {
     chrome.storage.sync.get('translated', function(data2) {
         chrome.storage.sync.get('queue', function(data3) {
@@ -94,6 +99,7 @@ function flipCard() {
     }
 }
 
+//this function changes the text on the flashcards
 function changeWords () {
     front.innerHTML = origWords[index];
     back.innerHTML = transWords[index];
@@ -114,6 +120,7 @@ function refill(shouldPrompt) {
     }
 }
 
+//This checks if a word is new, and if it is it adds it to the queue
 function isOldCheck(index) {
     if(!(isOld[index]==true)) {
         queue.push(index);
@@ -122,6 +129,7 @@ function isOldCheck(index) {
     }
 }
 
+//If a change occurs in chrome storage this function triggers
 chrome.storage.onChanged.addListener(function(changes, namespace){
     if(!(changes["words"] == null)) {
         var storageChange = changes["words"].newValue;
@@ -135,7 +143,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
     }
 })
 
-
+//This function opens the settings bar
 document.getElementById('settingsButton').onclick = openSettingsBar;
 function openSettingsBar() {
     if(settingsBarState) {

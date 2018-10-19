@@ -42,6 +42,7 @@ chrome.storage.sync.get('words', function(data) {
                         var b2 = document.getElementById('b2');
                         var b3 = document.getElementById('b3');
                         var b4 = document.getElementById('b4');
+                        var clear = document.getElementById('clear');
                         //button functions
                         b1.onclick = function() {
                             newTime(1,1,1);
@@ -54,6 +55,9 @@ chrome.storage.sync.get('words', function(data) {
                         };
                         b4.onclick = function() {
                             newTime(60,24,1);
+                        };
+                        clear.onclick = function() {
+                            clearWordBank();
                         };
                     });
                 });
@@ -138,8 +142,10 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
     else if(!(changes["translated"] == null)) {
         var storageChange = changes["translated"].newValue;
         transWords = storageChange;
-        isOldCheck(transWords.length-1);
-        refill(false);
+        if(transWords.length>=1) {
+            isOldCheck(transWords.length-1);
+            refill(false);
+        }
     }
 })
 
@@ -153,4 +159,19 @@ function openSettingsBar() {
         document.getElementById('settingsBar').style.width="15%";
         settingsBarState = true;
     }
+}
+
+function clearWordBank() {
+    chrome.storage.sync.set({'queue':[]});
+    queue = [];
+    chrome.storage.sync.set({'newWord':[]});
+    isOld = [];
+    chrome.storage.sync.set({'times':[]});
+    times = [];
+    chrome.storage.sync.set({'pushed':[]});
+    pushed = [];
+    chrome.storage.sync.set({'words':[]});
+    chrome.storage.sync.set({'translated':[]});
+    front.innerHTML = 'front';
+    back.innerHTML = 'back';
 }

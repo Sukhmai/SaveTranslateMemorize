@@ -72,15 +72,15 @@ function newTime(mins,hours,days) {
     times[index]=d.getTime()+1000*60*mins*hours*days;
     chrome.storage.sync.set({'times': times});
     pushed[index] = false;
-    nextPair();
+    nextPair(false);
 }
 
 //this gets the next pair of words
-function nextPair() {
+function nextPair(justAdded) {
     if(!(queue[1] == null)) {
         queue.splice(0,1);
         refill(false);
-    } else {
+    } else if(!justAdded){
         refill(true);
     }
     index = queue[0];
@@ -129,6 +129,9 @@ function isOldCheck(index) {
     if(!(isOld[index]==true)) {
         queue.push(index);
         isOld[index]=true;
+        if(queue.length == 1) {
+            nextPair(true);
+        }
         chrome.storage.sync.set({'newWord':isOld});
     }
 }
@@ -161,6 +164,7 @@ function openSettingsBar() {
     }
 }
 
+//This function clears the word bank
 function clearWordBank() {
     chrome.storage.sync.set({'queue':[]});
     queue = [];
